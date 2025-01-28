@@ -1,18 +1,14 @@
 from game import Game
+from mcts import MCTS
 
 game = Game()
+mcts = MCTS(iterations=1000)
 
-while True:
-    game.show_table()
+game.show_table()
 
-    coord = input("Seu movimento: ")
+result = mcts.search(game)
 
-    if coord == "w":
-        game.move_up()
-    elif coord == "s":
-        game.move_down()
-    elif coord == "a":
-        game.move_left()
-    else:
-        game.move_right()
+print(result['action'])
 
+print(f"\nMelhor jogada: {result['action']}")
+result['state'].game_state.show_table()

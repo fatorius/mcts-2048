@@ -20,9 +20,12 @@ class Game:
         self.tile_values = []
         self.score = 0
 
-
         self.init_grid()
         self.init_tiles()
+        self.update_score()
+
+    def set_state(self, state):
+        self.tile_values = state
         self.update_score()
 
     def init_grid(self):
@@ -47,6 +50,8 @@ class Game:
             self.NEW_TILES_WEIGHTS
         )
         self.tile_values[new_cell] = tile_value
+
+        self.update_score()
 
     def update_score(self):
         self.score = sum(self.tile_values)
