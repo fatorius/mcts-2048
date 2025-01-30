@@ -53,6 +53,40 @@ class Game:
 
         self.update_score()
 
+    def get_possible_actions(self):
+        possible_actions = []
+
+        for pos in range(self.NUMBER_OF_CELLS - 1, -1, -1):
+            if self.tile_values[pos] == 0:
+                continue
+            destination = self.find_rightmost_available_tile(pos, self.tile_values[pos])
+            if destination != pos:
+                possible_actions.append("right")
+                break
+
+        for pos in range(self.NUMBER_OF_CELLS):
+            if self.tile_values[pos] == 0:
+                continue
+            destination = self.find_leftmost_available_tile(pos, self.tile_values[pos])
+            if destination != pos:
+                possible_actions.append("left")
+
+        for pos in range(self.NUMBER_OF_CELLS):
+            if self.tile_values[pos] == 0:
+                continue
+            destination = self.find_topmost_available_tile(pos, self.tile_values[pos])
+            if destination != pos:
+                possible_actions.append("up")
+
+        for pos in range(self.NUMBER_OF_CELLS - 1, -1, -1):
+            if self.tile_values[pos] == 0:
+                continue
+            destination = self.find_bottommost_available_tile(pos, self.tile_values[pos])
+            if destination != pos:
+                possible_actions.append("down")
+
+        return possible_actions
+
     def update_score(self):
         self.score = sum(self.tile_values)
 

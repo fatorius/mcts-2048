@@ -63,7 +63,7 @@ class MCTS:
         return {"action": root_node.best_action(exploration_weight=0), "state": root_node.best_child(exploration_weight=0)}
 
     def get_possible_actions(self, game_state):
-        return ['up', 'down', 'left', 'right']
+        return game_state.get_possible_actions()
 
     def apply_action(self, game_state, action):
         if action == 'up':
@@ -77,13 +77,7 @@ class MCTS:
         return game_state
 
     def is_terminal(self, game_state):
-        temp_state = copy.deepcopy(game_state)
-        for action in self.get_possible_actions(temp_state):
-            state_copy = copy.deepcopy(temp_state)
-            self.apply_action(state_copy, action)
-            if state_copy.tile_values != temp_state.tile_values:
-                return False
-        return True
+        return len(game_state.get_possible_actions()) == 0
 
     def rollout(self, game_state):
         while not self.is_terminal(game_state):
