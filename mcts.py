@@ -11,6 +11,15 @@ class MCTSNode:
         self.visits = 0
         self.value = 0
 
+    def uct(self, exploration_weight=math.sqrt(2)):
+        if self.visits == 0:
+            return float('inf')
+
+        exploitation = self.value / self.visits
+        exploration = exploration_weight * math.sqrt(math.log(self.parent.visits + 1) / self.visits)
+
+        return exploitation + exploration
+
     def is_fully_expanded(self):
         return len(self.children) == 4
 
@@ -52,17 +61,16 @@ class MCTS:
 
             # Selection
             while not self.is_terminal(state):
+                if not node.children or (node.parent and node.uct() > max(child.uct() for child in node.children.values())):
+                    break
+
                 if not node.is_fully_expanded():
                     self.expand(node)
                     break
-                elif node.is_player_turn:
-                    action = node.select_child()
-                    node = node.children[action]
-                    state = self.apply_action(state, action)
-                else:
-                    action = random.choice(list(node.children.keys()))
-                    node = node.children[action]
-                    state = self.apply_action(state, action)
+
+                action = node.select_child()
+                node = node.children[action]
+                state = self.apply_action(state, action)
 
             # Expansion
             if not self.is_terminal(state):

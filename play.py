@@ -22,7 +22,12 @@ while True:
     game = Game()
     game.set_state(state)
     mcts = MCTS(iterations=10000)
-    result = mcts.search(game)
+    try:
+        result = mcts.search(game)
+    except ValueError:
+        game.update_score()
+        print(f"Fim de jogo, pontuação: {game.score}")
+        break
 
     if result['action'] == "down":
         ActionChains(driver).key_down(Keys.ARROW_DOWN).key_up(Keys.ARROW_DOWN).perform()
