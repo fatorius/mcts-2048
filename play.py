@@ -21,7 +21,7 @@ while True:
 
     game = Game()
     game.set_state(state)
-    mcts = MCTS(iterations=1000)
+    mcts = MCTS(iterations=10000)
     result = mcts.search(game)
 
     if result['action'] == "down":

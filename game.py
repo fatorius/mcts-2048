@@ -166,9 +166,6 @@ class Game:
                 self.move_tile_to(pos, destination)
                 number_of_moves += 1
 
-        if number_of_moves > 0:
-            self.generate_new_tile()
-
     def move_up(self):
         number_of_moves = 0
         for pos in range(self.NUMBER_OF_CELLS):
@@ -178,9 +175,6 @@ class Game:
             if destination != pos:
                 self. move_tile_to(pos, destination)
                 number_of_moves += 1
-
-        if number_of_moves > 0:
-            self.generate_new_tile()
 
     def move_right(self):
         number_of_moves = 0
@@ -192,9 +186,6 @@ class Game:
                 self.move_tile_to(pos, destination)
                 number_of_moves += 1
 
-        if number_of_moves > 0:
-            self.generate_new_tile()
-
     def move_down(self):
         number_of_moves = 0
         for pos in range(self.NUMBER_OF_CELLS - 1, -1, -1):
@@ -204,9 +195,6 @@ class Game:
             if destination != pos:
                 self.move_tile_to(pos, destination)
                 number_of_moves += 1
-
-        if number_of_moves > 0:
-            self.generate_new_tile()
 
     def show_table(self):
         print(f"Pontuação: {self.score}")
