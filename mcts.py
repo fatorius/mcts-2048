@@ -2,6 +2,8 @@ import math
 import copy
 import random
 import numpy as np
+import torch
+from train_value_network import ValueNetwork
 
 class MCTSNode:
     def __init__(self, game_state, parent=None, is_player_turn=True):
@@ -50,8 +52,12 @@ class MCTSNode:
         self.children[action] = child_node
 
 class MCTS:
-    def __init__(self, iterations=1000):
+    def __init__(self, iterations=1000, model_path="value_network.pth"):
         self.iterations = iterations
+        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        self.value_network = ValueNetwork().to(self.device)
+        self.value_network.load_state_dict(torch.load(model_path, map_location=self.device))
+        self.value_network.eval()
 
     def search(self, root_state):
         root_node = MCTSNode(root_state)
@@ -155,19 +161,16 @@ class MCTS:
     def is_terminal(self, game_state):
         return len(game_state.get_possible_actions()) == 0
 
-    def rollout(self, game_state, max_rollout_depth=20):
-        for _ in range(max_rollout_depth):
-            possible_actions = self.get_possible_actions(game_state)
-            if not possible_actions:
-                break
-            action = random.choice(possible_actions)
-            self.apply_action(game_state, action)
-
-        non_zero_tiles = len([v for v in game_state.tile_values if v > 0])
-        return 1 / non_zero_tiles
+    def rollout(self, game_state):
+        return self.predict_value(game_state)
 
     def backpropagate(self, node, reward):
         while node is not None:
             node.visits += 1
             node.value += reward
             node = node.parent
+    def predict_value(self, game_state):
+        state_tensor = torch.tensor(self.normalize_board(game_state), dtype=torch.float32)\
+            .unsqueeze(0).unsqueeze(0).to(self.device)
+        with torch.no_grad():
+            return self.value_network(state_tensor).item()
