@@ -1,0 +1,152 @@
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap');
+
+:root{
+  --bg: #ffffff;
+  --dark: #667783;
+  --text: #111721;
+  --light: #c0cbd5;
+  
+  --t2: #9FB798;
+  --t4: #788D71;
+  --t8: #58744e;
+  --t16: #58744e;
+  --t32: #2f4f3b;
+  --t64: #2e5052;
+  --t128: #1f1c3c;
+  --t256: #26143e;
+  --t512: #2a0730;
+  --t1024: #2e012a;
+  --t2048: #6e0516;
+}
+
+body{
+  background-color: var(--bg);
+  width: 100vw;
+  height: 100vh;
+
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#app{
+  width: 100vw;
+
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+#scoreboard{
+  font-family: sans-serif;
+  color: var(--text);
+}
+
+#display{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#grid{
+  width: 16vw;
+  aspect-ratio: 1;
+  display: grid;
+  justify-items: center;
+  align-items: center;
+  background-color: var(--dark);
+  border-radius: 15px;
+  border: solid var(--dark) 10px;
+}
+
+#sketch{
+  border: 1px solid black;
+}
+
+.cell{
+  background-color: var(--light);
+  width: 90%;
+  aspect-ratio: 1;
+  border-radius: 10px;
+}
+
+.tile-shrink{
+  transform: scale(0) !important;
+}
+
+.tile{
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 10px;
+  display: grid;
+  align-items: center;
+  justify-items: center;
+
+  color: var(--text);
+  font-family: sans-serif;
+  font-size: 2rem;
+  font-weight: bolder;
+  transform: scale(1);
+
+  transition: 0.2s ease-in-out;
+}
+
+.tile-2{
+  background-color: var(--t2);
+}
+
+.tile-4{
+  background-color: var(--t4);
+}
+
+.tile-8{
+  background-color: var(--t8);
+}
+
+.tile-16{
+  background-color: var(--t16);
+}
+
+.tile-32{
+  background-color: var(--t32);
+}
+
+.tile-64{
+  background-color: var(--t64);
+}
+
+.tile-128{
+  background-color: var(--t128);
+  color: white;
+}
+
+.tile-256{
+  background-color: var(--t256);
+  color: white;
+}
+
+.tile-512{
+  background-color: var(--t512);
+  color: white;
+}
+
+.tile-1024{
+  background-color: var(--t1024);
+  color: white;
+}
+
+.tile-2048{
+  background-color: var(--t2048);
+  color: white;
+}
+
+#me, a{
+  color: var(--dark);
+  font-family: "Caveat", serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-size: 1.5rem;
+  font-style: normal;
+}
