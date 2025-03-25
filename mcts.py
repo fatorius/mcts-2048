@@ -1,6 +1,7 @@
 import math
 import copy
 import random
+import numpy as np
 
 class MCTSNode:
     def __init__(self, game_state, parent=None, is_player_turn=True):
@@ -83,6 +84,41 @@ class MCTS:
             self.backpropagate(node, rollout_result)
 
         return {"action": root_node.best_action(exploration_weight=0), "state": root_node.best_child(exploration_weight=0)}
+
+    def normalize_board(self, game_state):
+        return np.array([[math.log2(v + 1) if v > 0 else 0 for v in game_state.tile_values]]).reshape(4, 4)
+
+    def collect_training_data(self, root_state, num_samples=1000, save_path="training_data.npy"):
+        training_data = []
+
+        for _ in range(num_samples):
+            node = MCTSNode(root_state)
+            state = copy.deepcopy(root_state)
+
+            for _ in range(self.iterations):
+                while not self.is_terminal(state):
+                    if not node.children or (node.parent and node.uct() > max(child.uct() for child in node.children.values())):
+                        break
+
+                    if not node.is_fully_expanded():
+                        self.expand(node)
+                        break
+
+                    action = node.select_child()
+                    node = node.children[action]
+                    state = self.apply_action(state, action)
+
+                if not self.is_terminal(state):
+                    self.expand(node)
+
+                rollout_result = self.rollout(state)
+                self.backpropagate(node, rollout_result)
+
+            normalized_state = self.normalize_board(state)
+            training_data.append((normalized_state, node.value / (node.visits + 1e-6)))
+
+        np.save(save_path, training_data)
+        print(f"Coletamos {num_samples} exemplos de treinamento e salvamos em {save_path}")
 
     def expand(self, node):
         if node.is_player_turn:
